@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+    <Pride_Low.stages.0.label>自豪感（低）</Pride_Low.stages.0.label>
+    <Pride_Medium.stages.0.label>自豪感（中）</Pride_Medium.stages.0.label>
+    <Pride_High.stages.0.label>自豪感（高）</Pride_High.stages.0.label>
+    <Pride_Monument.stages.0.label>自豪感（纪念碑）</Pride_Monument.stages.0.label>
+
+    <Pride_Low.stages.0.description>我做出了一件不错的作品</Pride_Low.stages.0.description>
+    <Pride_Medium.stages.0.description>我做出了一件优秀的作品</Pride_Medium.stages.0.description>
+    <Pride_High.stages.0.description>我做出了一件完美的作品！</Pride_High.stages.0.description>
+    <Pride_Monument.stages.0.description>多么宏伟的纪念碑！</Pride_Monument.stages.0.description>
+</LanguageData>

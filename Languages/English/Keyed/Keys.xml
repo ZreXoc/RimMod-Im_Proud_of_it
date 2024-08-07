@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+    <ImProudOfIt>I'm proud of it!</ImProudOfIt>
+    <Settings_Desc>Relative Quality is the difference between the quality of the item and the pawn's crafting level band, so that lower level pawns will also take pride in crafting normal items. The bands are specified as follows:
+        0: Awful, craft 0;
+        1: Poor, craft 1-4;
+        2: Normal, craft 5-9;
+        3: Good, craft 10-18;
+        4: Excellent, craft 19+;
+        5: Masterwork;
+        6: Legendary;
+        If a crafted 8 pawn makes a Chain Shotgun (Good), the Relative Quality is 3 - 2 = 1. There is no bonus to Relative Quality less than or equal to 0.</Settings_Desc>
+    <QI_Offset>Relative Quality offset</QI_Offset>
+    <Mood_Offset>Mood offset</Mood_Offset>
+    <Time_Offset>Duration offset (hour)</Time_Offset>
+</LanguageData>
