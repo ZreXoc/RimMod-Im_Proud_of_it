@@ -1,0 +1,5 @@
+is_global = true
+build_property.RootNamespace = ImP
+build_property.ProjectDir = /exdata/SteamLibrary/steamapps/common/RimWorld/Mods/Im_Proud_of_it/Source/
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 

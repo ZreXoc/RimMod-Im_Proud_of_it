@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "7FvwHF/2iC2yRYnKsDRDJLYPS1HoLj1WAOLlv4QmY6i//g/exm1sNwbIxaJsr84p2tu8DoSR53KI+dWd1LYVYA==",
+  "success": true,
+  "projectFilePath": "/exdata/SteamLibrary/steamapps/common/RimWorld/Mods/Im_Proud_of_it/Source/ImP.csproj",
+  "expectedPackageFiles": [
+    "/home/xic/.nuget/packages/microsoft.netframework.referenceassemblies/1.0.3/microsoft.netframework.referenceassemblies.1.0.3.nupkg.sha512",
+    "/home/xic/.nuget/packages/microsoft.netframework.referenceassemblies.net472/1.0.3/microsoft.netframework.referenceassemblies.net472.1.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

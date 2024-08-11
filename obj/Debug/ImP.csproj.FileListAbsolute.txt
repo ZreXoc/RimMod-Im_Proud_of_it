@@ -1,0 +1,9 @@
+/exdata/SteamLibrary/steamapps/common/RimWorld/Mods/Im_Proud_of_it/Assemblies/ImP.dll
+/exdata/SteamLibrary/steamapps/common/RimWorld/Mods/Im_Proud_of_it/Assemblies/ImP.pdb
+/exdata/SteamLibrary/steamapps/common/RimWorld/Mods/Im_Proud_of_it/Source/obj/Debug/ImP.csproj.AssemblyReference.cache
+/exdata/SteamLibrary/steamapps/common/RimWorld/Mods/Im_Proud_of_it/Source/obj/Debug/ImP.GeneratedMSBuildEditorConfig.editorconfig
+/exdata/SteamLibrary/steamapps/common/RimWorld/Mods/Im_Proud_of_it/Source/obj/Debug/ImP.AssemblyInfoInputs.cache
+/exdata/SteamLibrary/steamapps/common/RimWorld/Mods/Im_Proud_of_it/Source/obj/Debug/ImP.AssemblyInfo.cs
+/exdata/SteamLibrary/steamapps/common/RimWorld/Mods/Im_Proud_of_it/Source/obj/Debug/ImP.csproj.CoreCompileInputs.cache
+/exdata/SteamLibrary/steamapps/common/RimWorld/Mods/Im_Proud_of_it/Source/obj/Debug/ImP.dll
+/exdata/SteamLibrary/steamapps/common/RimWorld/Mods/Im_Proud_of_it/Source/obj/Debug/ImP.pdb
