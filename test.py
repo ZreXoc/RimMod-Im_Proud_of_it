@@ -13,18 +13,18 @@ K3=1
 CM=1.0
 CT=0
 
-u = lambda QI,work,Q: (K1*A**QI + K2*np.log(work)/np.log(S)+CM + (Q-4 if Q >= 5 else 0)) if QI > 0 else 0
-T = lambda QI,work,Q: (K3*work/S * QI+CT+(Q-4 if Q >= 5 else 0)) if QI > 0 else 0
+u = lambda RQ,work,Q: (K1*A**RQ + K2*np.log(work)/np.log(S)+CM + (Q-4 if Q >= 5 else 0)) if RQ > 0 else 0
+T = lambda RQ,work,Q: (K3*work/S * RQ+CT+(Q-4 if Q >= 5 else 0)) if RQ > 0 else 0
 
-def getQI(l,Q):
+def getRQ(l,Q):
     for i in range(len(L)):
         if(L[i]>l):
             return Q - (i-1)
 
 def tab(s):
     print("s = ", s)
-    mood_buffs = [[ u(QI=getQI(l,Q),work=s,Q=Q) for Q in range(0,7) ] for l in range(0,21)]
-    times = [[ T(QI=getQI(l,Q),work=s,Q=Q) for Q in range(0,7) ] for l in range(0,21)]
+    mood_buffs = [[ u(RQ=getRQ(l,Q),work=s,Q=Q) for Q in range(0,7) ] for l in range(0,21)]
+    times = [[ T(RQ=getRQ(l,Q),work=s,Q=Q) for Q in range(0,7) ] for l in range(0,21)]
 
     # P = 0
     mood_buffs[0][4] = 0
@@ -49,5 +49,5 @@ def tab(s):
 tab(31000)
 tab(60000)
 
-print(T(QI=getQI(8,3),work=105000,Q=3))
-print(T(QI=getQI(8,3),work=31000,Q=3))
+print(T(RQ=getRQ(8,3),work=105000,Q=3))
+print(T(RQ=getRQ(8,3),work=31000,Q=3))
