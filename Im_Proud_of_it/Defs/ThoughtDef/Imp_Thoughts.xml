@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <ThoughtDef Name="ImP_PrideBase" Abstract="True">
+        <thoughtClass>Thought_Memory</thoughtClass>
+        <durationDays>2</durationDays>
+        <stackLimit>3</stackLimit>
+        <stackedEffectMultiplier>0.4</stackedEffectMultiplier>
+    </ThoughtDef>
+    <ThoughtDef ParentName="ImP_PrideBase">
+        <defName>ImP_Pride_Low</defName>
+        <stages>
+            <li>
+                <label>pride (low)</label>
+                <description>I made a nice product.</description>
+            </li>
+        </stages>
+    </ThoughtDef>
+    <ThoughtDef ParentName="ImP_PrideBase">
+        <defName>ImP_Pride_Medium</defName>
+        <stages>
+            <li>
+                <label>pride (medium)</label>
+                <description>I made a perfect product.</description>
+            </li>
+        </stages>
+    </ThoughtDef>
+    <ThoughtDef ParentName="ImP_PrideBase">
+        <defName>ImP_Pride_High</defName>
+        <stages>
+            <li>
+                <label>pride (high)</label>
+                <description>I made a product that is far above my level!</description>
+            </li>
+        </stages>
+    </ThoughtDef>
+   
+    <!-- frustration -->
+    <ThoughtDef Name="FrustrationBase" Abstract="True">
+        <thoughtClass>Thought_Memory</thoughtClass>
+        <durationDays>2</durationDays>
+        <stackLimit>3</stackLimit>
+        <stackedEffectMultiplier>0.8</stackedEffectMultiplier>
+    </ThoughtDef>
+    <ThoughtDef ParentName="FrustrationBase">
+        <defName>ImP_Frustration_Low</defName>
+        <stages>
+            <li>
+                <label>frustration (low)</label>
+                <description>I could have done better</description>
+            </li>
+        </stages>
+    </ThoughtDef>
+    <ThoughtDef ParentName="FrustrationBase">
+        <defName>ImP_Frustration_Medium</defName>
+        <stages>
+            <li>
+                <label>frustration (medium)</label>
+                <description>I messed it up</description>
+            </li>
+        </stages>
+    </ThoughtDef>
+    <ThoughtDef ParentName="FrustrationBase">
+        <defName>ImP_Frustration_High</defName>
+        <stages>
+            <li>
+                <label>frustration (high)</label>
+                <description>This garbage is a stain on my life!</description>
+            </li>
+        </stages>
+    </ThoughtDef>
+    
+    <!-- monument -->
+    <ThoughtDef>
+        <defName>ImP_Pride_Monument</defName>
+        <thoughtClass>Thought_Memory</thoughtClass>
+        <durationDays>10</durationDays>
+        <stackLimit>2</stackLimit>
+        <stackedEffectMultiplier>0.5</stackedEffectMultiplier>
+        <stages>
+            <li>
+                <label>pride (monument)</label>
+                <description>What a spectacular monument!!</description>
+                <baseMoodEffect>8</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+</Defs>

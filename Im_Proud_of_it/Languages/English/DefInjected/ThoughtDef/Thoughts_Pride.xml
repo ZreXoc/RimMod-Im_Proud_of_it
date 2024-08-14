@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+    <ImP_Pride_Low.stages.0.label>pride (low)</ImP_Pride_Low.stages.0.label>
+    <ImP_Pride_Medium.stages.0.label>pride (medium)</ImP_Pride_Medium.stages.0.label>
+    <ImP_Pride_High.stages.0.label>pride (high)</ImP_Pride_High.stages.0.label>
+
+    <ImP_Pride_Low.stages.0.description>I made a nice product.</ImP_Pride_Low.stages.0.description>
+    <ImP_Pride_Medium.stages.0.description>I made a perfect product.</ImP_Pride_Medium.stages.0.description>
+    <ImP_Pride_High.stages.0.description>I made a product that is far above my level!</ImP_Pride_High.stages.0.description>
+</LanguageData>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+    <ImP_Pride_Low.stages.0.label>自豪感（低）</ImP_Pride_Low.stages.0.label>
+    <ImP_Pride_Low.stages.0.description>我做出了一件不错的作品</ImP_Pride_Low.stages.0.description>
+    
+    <ImP_Pride_Medium.stages.0.label>自豪感（中）</ImP_Pride_Medium.stages.0.label>
+    <ImP_Pride_Medium.stages.0.description>我做出了一件优秀的作品</ImP_Pride_Medium.stages.0.description>
+    
+    <ImP_Pride_High.stages.0.label>自豪感（高）</ImP_Pride_High.stages.0.label>
+    <ImP_Pride_High.stages.0.description>我做出了一件完美的作品！</ImP_Pride_High.stages.0.description>
+
+    <ImP_Frustration_Low.stages.0.label>挫败感（低）</ImP_Frustration_Low.stages.0.label>
+    <ImP_Frustration_Low.stages.0.description>我本可以做得更好</ImP_Frustration_Low.stages.0.description>
+
+    <ImP_Frustration_Medium.stages.0.label>挫败感（中）</ImP_Frustration_Medium.stages.0.label>
+    <ImP_Frustration_Medium.stages.0.description>我搞砸了</ImP_Frustration_Medium.stages.0.description>
+
+    <ImP_Frustration_High.stages.0.label>挫败感（高）</ImP_Frustration_High.stages.0.label>
+    <ImP_Frustration_High.stages.0.description>这堆垃圾是我人生中的污点</ImP_Frustration_High.stages.0.description>
+    
+    <ImP_Pride_Monument.stages.0.label>自豪感（纪念碑）</ImP_Pride_Monument.stages.0.label>
+    <ImP_Pride_Monument.stages.0.description>多么宏伟的纪念碑！</ImP_Pride_Monument.stages.0.description>
+</LanguageData>
