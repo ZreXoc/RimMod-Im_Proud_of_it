@@ -17,7 +17,7 @@ public class PatchMounumentMakerTick
       if (!__instance.IsHashIntervalTick(177))
         return;
       
-      Log.Message("monument complete");
+      // Log.Message("monument complete");
       // When Complete
       if (!__instance.complete & __instance.AllDone)
       {

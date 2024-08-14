@@ -43,30 +43,56 @@ public class ImpCore
         };
     }
 
+    // Construction
+    public static ThoughtDef GetFixedThoughtDefOf(Pawn worker, Thing thing)
+    {
+        
+        QualityCategory quality;
+
+        // CompQuality comp1 = thing.TryGetComp<CompQuality>();
+        
+        if (worker?.skills == null || !thing.TryGetQuality(out quality)) return null;
+        // Log.Message(quality);
+        
+        // if (thing.HasThingCategory(ThingCategoryDefOf.Buildings))
+        if (thing.def.category == ThingCategory.Building)
+        {
+           quality -= (QualityCategory)GetRoleEffectQualityOffset(worker);
+           var level = worker.skills.GetSkill(SkillDefOf.Construction).Level;
+           var workAmount= thing.GetStatValue(StatDefOf.WorkToBuild);
+           var thought = GetFixedThoughtDefOf(level, quality, workAmount);
+           return thought;
+        }
+
+        Log.ErrorOnce($"{thing} is not in the category of Buildings","Imp_not_a_building".GetHashCode());
+        return null;
+    }
+    // Craft and sculpture
     public static ThoughtDef GetFixedThoughtDefOf(Pawn worker, RecipeDef recipeDef, Thing thing)
     {
         QualityCategory quality;
 
         if (worker?.skills == null || !thing.TryGetQuality(out quality)) return null;
 
-        Log.Message($"quality1:{quality}");
-        if (recipeDef.workSkill == SkillDefOf.Crafting)
-        {
-            Precept_Role role = worker.Ideo.GetRole(worker);
-            RoleEffect roleEffect =
-                role?.def.roleEffects?.FirstOrDefault<RoleEffect>(
-                    (Predicate<RoleEffect>)(eff => eff is RoleEffect_ProductionQualityOffset));
-            if (roleEffect != null)
-                quality = (QualityCategory)Math.Max(0,
-                    (int)quality - ((RoleEffect_ProductionQualityOffset)roleEffect).offset);
-        }
+        if (recipeDef.workSkill == SkillDefOf.Crafting) quality -= (QualityCategory)GetRoleEffectQualityOffset(worker);
 
-        Log.Message($"quality2:{quality}");
         var level = worker.skills.GetSkill(recipeDef.workSkill).Level;
         var thought = GetFixedThoughtDefOf(level, quality,
             recipeDef.WorkAmountTotal(thing));
 
         return thought;
+    }
+
+    private static int GetRoleEffectQualityOffset(Pawn worker)
+    {
+        Precept_Role role = worker.Ideo.GetRole(worker);
+        RoleEffect roleEffect =
+            role?.def.roleEffects?.FirstOrDefault<RoleEffect>(
+                (Predicate<RoleEffect>)(eff => eff is RoleEffect_ProductionQualityOffset));
+        if (roleEffect != null)
+                return ((RoleEffect_ProductionQualityOffset)roleEffect).offset;
+
+        return 0;
     }
 
     public static ThoughtDef GetFixedThoughtDefOf(float skill, QualityCategory quality, float work)
