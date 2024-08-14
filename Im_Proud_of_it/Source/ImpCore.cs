@@ -71,34 +71,34 @@ public class ImpCore
 
     public static ThoughtDef GetFixedThoughtDefOf(float skill, QualityCategory quality, float work)
     {
-        if (!GetParams(skill, quality, out var RQ, out var moodFactor, out var timeFactor)) return null;
+        if (!GetParams(skill, quality, out var RQ, out var moodFactor, out var durationFactor)) return null;
 
         ThoughtDef def = GetThoughtDefOfByRQ(RQ);
 
-        var (mood, time) = CalcMoodAndTime(quality, RQ, work, moodFactor, timeFactor);
+        var (mood, duration) = CalcMoodAndDuration(quality, RQ, work, moodFactor, durationFactor);
 
         def.stages[0].baseMoodEffect = mood;
-        def.durationDays = time;
+        def.durationDays = duration;
 
         return def;
     }
 
     private static bool GetParams(float skill, QualityCategory quality, out float RQ, out float moodFactor,
-        out float timeFactor, bool isFrustrainEnabled = true, float RQOffset = 0)
+        out float durationFactor, bool isFrustrainEnabled = true, float RQOffset = 0)
     {
         RQ = GetQualityIndex(skill, quality) + RQOffset;
 
         // Log.Message($"RQ:{RQ}, work:{work}");
 
         moodFactor = 0;
-        timeFactor = 0;
+        durationFactor = 0;
 
         if (RQ > 0)
         {
             RQ -= Settings.prideRQOffset;
             if (RQ <= 0) return false;
             moodFactor = Settings.prideMoodFactor;
-            timeFactor = Settings.prideTimeFactor;
+            durationFactor = Settings.prideDurationFactor;
         }
         else if (RQ < 0)
         {
@@ -106,7 +106,7 @@ public class ImpCore
             RQ += Settings.frustrationRQOffset;
             if (RQ >= 0) return false;
             moodFactor = Settings.frustrationMoodFactor;
-            timeFactor = Settings.frustrationTimeFactor;
+            durationFactor = Settings.frustrationDurationFactor;
         }
         else
         {
@@ -116,28 +116,31 @@ public class ImpCore
         return true;
     }
 
-    public static (float, float) CalcMoodAndTime(QualityCategory quality, float RQ, float workAmount,
+    public static (float, float) CalcMoodAndDuration(QualityCategory quality, float RQ, float workAmount,
         float moodFactor = 1,
-        float timeFactor = 1)
+        float durationFactor = 1)
     {
         if (RQ < 0) moodFactor *= -1;
         RQ = Math.Abs(RQ);
-        float mood = moodFactor * (float)(K1 * Math.Pow(A, RQ) + K2 * Math.Log(workAmount) / Math.Log(S) + CM);
-        float time = timeFactor * (K3 * workAmount / S * RQ + CT);
+        float mood = (float)(K1 * Math.Pow(A, RQ) + K2 * Math.Log(workAmount) / Math.Log(S) + CM);
+        float duration = (K3 * workAmount / S * RQ + CT);
 
         if (quality == QualityCategory.Masterwork)
         {
             mood += 1;
-            time += 1;
+            duration += 1;
         }
 
         if (quality == QualityCategory.Legendary)
         {
             mood += 2;
-            time += 3;
+            duration += 3;
         }
 
-        return (mood, time);
+        mood *= moodFactor;
+        duration *= durationFactor;
+
+        return (mood, duration);
     }
 
     /// <summary>
@@ -163,9 +166,9 @@ public class ImpCore
         {
             for (int j = 0; j < 7; j++)
             {
-                GetParams(i, (QualityCategory)j, out var RQ, out var moodFactor, out var timeFactor,
+                GetParams(i, (QualityCategory)j, out var RQ, out var moodFactor, out var durationFactor,
                     Settings.isFrustrationEnabled);
-                eg[i, j] = CalcMoodAndTime((QualityCategory)j, RQ, workAmount, moodFactor, timeFactor);
+                eg[i, j] = CalcMoodAndDuration((QualityCategory)j, RQ, workAmount, moodFactor, durationFactor);
             }
         }
 

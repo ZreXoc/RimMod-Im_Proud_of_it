@@ -23,7 +23,7 @@ public class PatchMounumentMakerTick
       {
         var def = ImpThoughtDefOf.ImP_Pride_Monument;
         def.stages[0].baseMoodEffect = Settings.mounumentMood;
-        def.durationDays = Settings.mounumentTime;
+        def.durationDays = Settings.mounumentDuration;
           foreach (var pawn in PawnsFinder.HomeMaps_FreeColonistsSpawned)
           {
               pawn.needs?.mood?.thoughts?.memories.TryGainMemory(ImpThoughtDefOf.ImP_Pride_Monument);

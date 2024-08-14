@@ -13,13 +13,17 @@
         如手工8小人制作出链式霰弹枪（良好），则相对质量为 3 - 2 = 1。</Settings_Desc>
     <RQ_Offset>相对质量修正</RQ_Offset>
     <Mood_Offset>心情修正</Mood_Offset>
-    <Time_Offset>时间修正(小时)</Time_Offset>
+    <Duration_Offset>时间修正(小时)</Duration_Offset>
     <Mood_Factor>心情系数</Mood_Factor>
-    <Time_Factor>时间系数(日)</Time_Factor>
+    <Duration_Factor>时间系数</Duration_Factor>
+    <Monument>纪念碑</Monument>
+    <Mood>心情加成</Mood>
+    <Duration>持续时间</Duration>
     <Pride>自豪感</Pride>
     <Frustration>挫败感</Frustration>
     <Frustration_Enabled>允许挫败感</Frustration_Enabled>
     <Skill>技能</Skill>
     <Example>例子</Example>
-    <Example_Desc>以链式霰弹枪为例，各个技能等级和物品质量对应的加成（心情x时间（日））如下。（注意在某些技能等级下是不可能做出极高/低质量物品的）</Example_Desc>
+    <Example_Desc>各个技能等级和物品质量对应的加成（心情x时间（日））如下。（注意在某些技能等级下是不可能做出极高/低质量物品的）</Example_Desc>
+    <Work_Amount>工作时长(tick)</Work_Amount>
 </LanguageData>

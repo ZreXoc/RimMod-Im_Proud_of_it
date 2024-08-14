@@ -24,7 +24,7 @@ def getRQ(l,Q):
 def tab(s):
     print("s = ", s)
     mood_buffs = [[ u(RQ=getRQ(l,Q),work=s,Q=Q) for Q in range(0,7) ] for l in range(0,21)]
-    times = [[ T(RQ=getRQ(l,Q),work=s,Q=Q) for Q in range(0,7) ] for l in range(0,21)]
+    durations = [[ T(RQ=getRQ(l,Q),work=s,Q=Q) for Q in range(0,7) ] for l in range(0,21)]
 
     # P = 0
     mood_buffs[0][4] = 0
@@ -33,14 +33,14 @@ def tab(s):
     mood_buffs[2][5] = 0
     mood_buffs[3][5] = 0
 
-    times[0][4] = 0
-    times[0][5] = 0
-    times[1][5] = 0
-    times[2][5] = 0
-    times[3][5] = 0
+    durations[0][4] = 0
+    durations[0][5] = 0
+    durations[1][5] = 0
+    durations[2][5] = 0
+    durations[3][5] = 0
 
 
-    t = [ [f"{round(mood_buffs[i][j],1)}x{round(times[i][j],1)}" for j in range(7)] for i in range(21) ]
+    t = [ [f"{round(mood_buffs[i][j],1)}x{round(durations[i][j],1)}" for j in range(7)] for i in range(21) ]
 
     df = pd.DataFrame(t)
 

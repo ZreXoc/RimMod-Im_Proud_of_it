@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Text;
 using RimWorld;
 using UnityEngine;
@@ -12,43 +13,42 @@ public class Settings : ModSettings
 
     public static float prideMoodFactor = 1;
 
-    public static float prideTimeFactor = 1;
+    public static float prideDurationFactor = 1;
 
-    // public int prideTimeOffset = 0;
-    // public int prideMoodOffset = 0;
     public static int prideRQOffset = 0;
 
 
     public static float frustrationMoodFactor = 0.5f;
 
-    public static float frustrationTimeFactor = 0.5f;
+    public static float frustrationDurationFactor = 0.5f;
 
-    // public int frustrationTimeOffset = 0;
-    // public int frustrationMoodOffset = 0;
     public static int frustrationRQOffset = 0;
 
     public static int mounumentMood = 8;
-    public static int mounumentTime = 10;
+    public static int mounumentDuration = 10;
+
+    private static int exampleWorkAmount = 31000;
 
     public override void ExposeData()
     {
         Scribe_Values.Look(ref mounumentMood, nameof(mounumentMood), 8);
-        Scribe_Values.Look(ref mounumentTime, nameof(mounumentTime), 10);
-        Scribe_Values.Look(ref prideTimeFactor, nameof(prideTimeFactor), 0);
-        Scribe_Values.Look(ref prideMoodFactor, nameof(prideMoodFactor), 0);
-        // Scribe_Values.Look(ref prideTimeOffset,nameof(prideTimeOffset),0);
+        Scribe_Values.Look(ref mounumentDuration, nameof(mounumentDuration), 10);
+        Scribe_Values.Look(ref prideDurationFactor, nameof(prideDurationFactor), 1);
+        Scribe_Values.Look(ref prideMoodFactor, nameof(prideMoodFactor), 1);
+        // Scribe_Values.Look(ref prideDurationOffset,nameof(prideDurationOffset),0);
         // Scribe_Values.Look(ref prideMoodOffset,nameof(prideMoodOffset),0);
         Scribe_Values.Look(ref prideRQOffset, nameof(prideRQOffset), 0);
-        Scribe_Values.Look(ref frustrationMoodFactor, nameof(frustrationMoodFactor), 0);
-        Scribe_Values.Look(ref frustrationTimeFactor, nameof(frustrationTimeFactor), 0);
-        // Scribe_Values.Look(ref frustrationTimeOffset,nameof(frustrationTimeOffset),0);
+        Scribe_Values.Look(ref frustrationMoodFactor, nameof(frustrationMoodFactor), 1);
+        Scribe_Values.Look(ref frustrationDurationFactor, nameof(frustrationDurationFactor), 1);
+        // Scribe_Values.Look(ref frustrationDurationOffset,nameof(frustrationDurationOffset),0);
         // Scribe_Values.Look(ref frustrationMoodOffset,nameof(frustrationMoodOffset),0);
         Scribe_Values.Look(ref frustrationRQOffset, nameof(frustrationRQOffset), 0);
+        Scribe_Values.Look(ref exampleWorkAmount, nameof(exampleWorkAmount), 31000);
         base.ExposeData();
     }
 
-    public static Vector2 scrollPositionLeft = Vector2.zero;
-    public static Vector2 scrollPositionRight = Vector2.zero;
+    private static Vector2 scrollPositionLeft = Vector2.zero;
+    private static Vector2 scrollPositionRight = Vector2.zero;
 
     public static void DoSettingsWindowContents(Rect inRect)
     {
@@ -56,92 +56,72 @@ public class Settings : ModSettings
 
         var outRectLeft = new Rect(inRect.x, inRect.y, inRect.width / 2, inRect.height);
         var outRectRight = new Rect(inRect.x + inRect.width / 2, inRect.y, inRect.width / 2, inRect.height);
-        var scrollRectLeft = new Rect(0, 0, inRect.width / 2 - 16f, inRect.height * 2f + 50);
+        var scrollRectLeft = new Rect(0, 0, inRect.width / 2 - 16f, inRect.height);
         var scrollRectRight = new Rect(0, 0, inRect.width / 2 + 20f, inRect.height);
         Widgets.BeginScrollView(outRectLeft, ref scrollPositionLeft, scrollRectLeft, true);
 
         list.Begin(scrollRectLeft);
+        list.Label("Settings_Desc".Translate());
+
+        list.Gap(5);
         {
-            list.Label("Settings_Desc".Translate());
-
-            list.CheckboxLabeled($"{"Frustration_Enabled".Translate()}", ref isFrustrationEnabled);
-                // string moodBuffer = prideMoodOffset.ToString(),
-                         //     timeBuffer = prideTimeOffset.ToString();
-                         // listingStandard.TextFieldNumericLabeled($"{"Mood_Offset".Translate()}: ",
-                         //     ref prideMoodOffset,
-                         //     ref moodBuffer);
-                         // listingStandard.TextFieldNumericLabeled($"{"Time_Offset".Translate()}: ",
-                         //     ref prideTimeOffset,
-                         //     ref timeBuffer);   
-                         //TODO
-                /*
-                mounumentMood =
-                    (int)Math.Round(list.SliderLabeled(
-                        $"{"Monument_Mood".Translate()}: {mounumentMood}",
-                        prideRQOffset, 0, 30));
-            
-                mounumentTime =
-                    (int)Math.Round(list.SliderLabeled(
-                        $"{"Monument_Mood".Translate()}: {mounumentMood}",
-                        prideRQOffset, 0, 30));
-            */
-            list.GapLine();
-
             {
-                list.Label("Pride".Translate());
+                var sec = list.BeginSection(24 * 3);
+                sec.Label("Monument".Translate());
+
+                string moodBuffer = mounumentMood.ToString(),
+                    durationBuffer = mounumentDuration.ToString();
+                sec.TextFieldNumericLabeled($"{"Mood".Translate()}: ",
+                    ref mounumentMood,
+                    ref moodBuffer);
+                sec.TextFieldNumericLabeled($"{"Duration".Translate()}: ",
+                    ref mounumentDuration,
+                    ref durationBuffer);
+                sec.EndSection(sec);
+            }
+
+            list.Gap(5);
+            {
+                var sec = list.BeginSection(24 * 5);
+                sec.Label("Pride".Translate());
                 prideRQOffset =
-                    (int)Math.Round(list.SliderLabeled(
+                    (int)Math.Round(sec.SliderLabeled(
                         $"{"RQ_Offset".Translate()}: {prideRQOffset}",
-                        prideRQOffset, 0, 3));
+                        prideRQOffset, 0, 6));
 
                 prideMoodFactor =
-                    (float)Math.Round(list.SliderLabeled(
+                    (float)Math.Round(sec.SliderLabeled(
                         $"{"Mood_Factor".Translate()}: {prideMoodFactor}",
                         prideMoodFactor, 0, 3), 1);
 
-                prideTimeFactor =
-                    (float)Math.Round(list.SliderLabeled(
-                        $"{"Time_Factor".Translate()}: {prideTimeFactor}",
-                        prideTimeFactor, 0, 3), 1);
+                prideDurationFactor =
+                    (float)Math.Round(sec.SliderLabeled(
+                        $"{"Duration_Factor".Translate()}: {prideDurationFactor}",
+                        prideDurationFactor, 0, 3), 1);
 
-                // string moodBuffer = prideMoodOffset.ToString(),
-                //     timeBuffer = prideTimeOffset.ToString();
-                // listingStandard.TextFieldNumericLabeled($"{"Mood_Offset".Translate()}: ",
-                //     ref prideMoodOffset,
-                //     ref moodBuffer);
-                // listingStandard.TextFieldNumericLabeled($"{"Time_Offset".Translate()}: ",
-                //     ref prideTimeOffset,
-                //     ref timeBuffer);
+                list.EndSection(sec);
             }
-            list.GapLine();
+            list.Gap(5);
             {
-                list.Label("Frustration".Translate());
+                var sec = list.BeginSection(24 * 6);
+                sec.Label("Frustration".Translate());
+
+                sec.CheckboxLabeled($"{"Frustration_Enabled".Translate()}", ref isFrustrationEnabled);
                 frustrationRQOffset =
-                    (int)Math.Round(list.SliderLabeled(
+                    (int)Math.Round(sec.SliderLabeled(
                         $"{"RQ_Offset".Translate()}: {frustrationRQOffset}",
-                        frustrationRQOffset, 0, 3));
+                        frustrationRQOffset, 0, 4));
 
                 frustrationMoodFactor =
-                    (float)Math.Round(list.SliderLabeled(
+                    (float)Math.Round(sec.SliderLabeled(
                         $"{"Mood_Factor".Translate()}: {frustrationMoodFactor}",
                         frustrationMoodFactor, 0, 3), 1);
 
-                frustrationTimeFactor =
-                    (float)Math.Round(list.SliderLabeled(
-                        $"{"Time_Factor".Translate()}: {frustrationTimeFactor}",
-                        frustrationTimeFactor, 0, 3), 1);
-
-
-                /*
-                string moodBuffer = frustrationMoodOffset.ToString(),
-                    timeBuffer = frustrationTimeOffset.ToString();
-                listingStandard.TextFieldNumericLabeled($"{"Mood_Offset".Translate()}: ",
-                    ref frustrationMoodOffset,
-                    ref moodBuffer);
-                listingStandard.TextFieldNumericLabeled($"{"Time_Offset".Translate()}: ",
-                    ref frustrationTimeOffset,
-                    ref timeBuffer);
-            */
+                frustrationDurationFactor =
+                    (float)Math.Round(sec.SliderLabeled(
+                        $"{"Duration_Factor".Translate()}: {frustrationDurationFactor}",
+                        frustrationDurationFactor, 0, 3), 1);
+                list.EndSection(sec);
             }
         }
 
@@ -154,21 +134,24 @@ public class Settings : ModSettings
             list.Label("Example".Translate());
             list.Label("Example_Desc".Translate());
 
+            string workAmountBuffer = exampleWorkAmount.ToString();
+            list.TextFieldNumericLabeled("Work_Amount".Translate(), ref exampleWorkAmount, ref workAmountBuffer);
 
-            var eg = ImpCore.GenerateExameple(31000);
+
+            // Preview
+            var eg = ImpCore.GenerateExameple(exampleWorkAmount);
             string str = "";
             const int ALIGN = 10;
 
-            // fix for Chinese Character
+            // align for Chinese Character
             string AlignFixed(string str, int align)
             {
-                int width = str.Length;
-                if (str[0] >= 0x4e00 && str[0] <= 0x9fbb) width *= 2;
-                return new string(' ', Math.Max( align - width,0)) + str;
+                int width = str.Sum(ch => (ch >= 0x4e00 && ch <= 0x9fbb) ? 2 : 1);
+                return new string(' ', Math.Max(align - width, 0)) + str;
             }
 
             // title
-            str += AlignFixed("Skill".Translate(),5);
+            str += AlignFixed("Skill".Translate(), 5);
             for (int i = 0; i < 7; i++)
             {
                 string quality = ((QualityCategory)i).GetLabelShort();
@@ -184,8 +167,8 @@ public class Settings : ModSettings
                 str += $"{i,5}";
                 for (int j = 0; j < 7; j++)
                 {
-                    var (mood, time) = eg[i, j];
-                    var tmp = $"{Math.Round(mood)}x{Math.Round(time, 1)}" + (j == 6 ? '\n' : ',');
+                    var (mood, duration) = eg[i, j];
+                    var tmp = $"{Math.Round(mood)}x{Math.Round(duration, 1)}" + (j == 6 ? '\n' : ',');
                     str += $"{tmp,ALIGN}";
                 }
             }

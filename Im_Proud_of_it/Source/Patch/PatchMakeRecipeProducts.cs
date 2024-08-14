@@ -38,7 +38,7 @@ public class PatchMakeRecipeProducts
 
             // Log.Message(options.RQ_Offset);
             // Log.Message(options.Mood_Offset);
-            // Log.Message(options.Time_Offset);
+            // Log.Message(options.Duration_Offset);
 
             var thought = ImpCore.GetFixedThoughtDefOf(worker, recipeDef, thing);
 

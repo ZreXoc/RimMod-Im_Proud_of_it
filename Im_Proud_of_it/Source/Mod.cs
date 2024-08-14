@@ -8,11 +8,9 @@ namespace ImP;
 
 public class Mod : Verse.Mod
 {
-    public Settings settings;
 
     public Mod(ModContentPack content) : base(content)
     {
-        this.settings = GetSettings<Settings>();
         var harmony = new Harmony("zrex.ImP");
         harmony.PatchAll();
     }
