@@ -7,7 +7,6 @@ using Verse;
 
 namespace ImP;
 
-//TODO
 [HarmonyPatch(typeof(MonumentMarker), nameof(MonumentMarker.Tick))]
 public class PatchMounumentMakerTick
 {
@@ -17,7 +16,6 @@ public class PatchMounumentMakerTick
       if (!__instance.IsHashIntervalTick(177))
         return;
       
-      // Log.Message("monument complete");
       // When Complete
       if (!__instance.complete & __instance.AllDone)
       {

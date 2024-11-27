@@ -12,7 +12,6 @@ public class PatchConstruction
     {
         if (thing.def.category != ThingCategory.Building) return;
 
-
         var thought = ImpCore.GetFixedThoughtDefOf(worker, thing);
 
         if (thought != null)
