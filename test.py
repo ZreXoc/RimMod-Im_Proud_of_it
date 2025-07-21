@@ -13,8 +13,8 @@ K3=1
 CM=1.0
 CT=0
 
-u = lambda RQ,work,Q: (K1*A**RQ + K2*np.log(work)/np.log(S)+CM + (Q-4 if Q >= 5 else 0)) if RQ > 0 else 0
-T = lambda RQ,work,Q: (K3*work/S * RQ+CT+(Q-4 if Q >= 5 else 0)) if RQ > 0 else 0
+u = lambda RQ,work,Q: (K1*A**RQ + K2*np.log(work)/np.log(S)+CM ) if RQ > 0 else 0
+T = lambda RQ,work,Q: (K3*np.log(work)/np.log(S) * np.log((RQ+1))+CT) if RQ > 0 else 0
 
 def getRQ(l,Q):
     for i in range(len(L)):

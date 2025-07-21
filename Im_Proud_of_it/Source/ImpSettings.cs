@@ -7,7 +7,7 @@ using Verse;
 
 namespace ImP;
 
-public class Settings : ModSettings
+public class ImpSettings : ModSettings
 {
     public static bool isFrustrationEnabled = true;
 
@@ -18,11 +18,11 @@ public class Settings : ModSettings
     public static int prideRQOffset = 0;
 
 
-    public static float frustrationMoodFactor = 0.5f;
+    public static float frustrationMoodFactor = 1.5f;
 
-    public static float frustrationDurationFactor = 0.5f;
+    public static float frustrationDurationFactor = 1.5f;
 
-    public static int frustrationRQOffset = 0;
+    public static int frustrationRQOffset = 1;
 
     public static int mounumentMood = 8;
     public static int mounumentDuration = 10;
@@ -38,11 +38,11 @@ public class Settings : ModSettings
         // Scribe_Values.Look(ref prideDurationOffset,nameof(prideDurationOffset),0);
         // Scribe_Values.Look(ref prideMoodOffset,nameof(prideMoodOffset),0);
         Scribe_Values.Look(ref prideRQOffset, nameof(prideRQOffset), 0);
-        Scribe_Values.Look(ref frustrationMoodFactor, nameof(frustrationMoodFactor), 1);
-        Scribe_Values.Look(ref frustrationDurationFactor, nameof(frustrationDurationFactor), 1);
+        Scribe_Values.Look(ref frustrationMoodFactor, nameof(frustrationMoodFactor), 1.5f);
+        Scribe_Values.Look(ref frustrationDurationFactor, nameof(frustrationDurationFactor), 1.5f);
         // Scribe_Values.Look(ref frustrationDurationOffset,nameof(frustrationDurationOffset),0);
         // Scribe_Values.Look(ref frustrationMoodOffset,nameof(frustrationMoodOffset),0);
-        Scribe_Values.Look(ref frustrationRQOffset, nameof(frustrationRQOffset), 0);
+        Scribe_Values.Look(ref frustrationRQOffset, nameof(frustrationRQOffset), 1);
         Scribe_Values.Look(ref exampleWorkAmount, nameof(exampleWorkAmount), 31000);
         base.ExposeData();
     }
@@ -50,7 +50,7 @@ public class Settings : ModSettings
     private static Vector2 scrollPositionLeft = Vector2.zero;
     private static Vector2 scrollPositionRight = Vector2.zero;
 
-    public static void DoSettingsWindowContents(Rect inRect)
+    public void DoSettingsWindowContents(Rect inRect)
     {
         var list = new Listing_Standard();
 
@@ -69,14 +69,14 @@ public class Settings : ModSettings
                 var sec = list.BeginSection(24 * 3);
                 sec.Label("Monument".Translate());
 
-                string moodBuffer = mounumentMood.ToString(),
-                    durationBuffer = mounumentDuration.ToString();
+                string buffer = null;
                 sec.TextFieldNumericLabeled($"{"Mood".Translate()}: ",
                     ref mounumentMood,
-                    ref moodBuffer);
+                    ref buffer);
+                buffer = null;
                 sec.TextFieldNumericLabeled($"{"Duration".Translate()}: ",
                     ref mounumentDuration,
-                    ref durationBuffer);
+                    ref buffer);
                 sec.EndSection(sec);
             }
 
@@ -85,21 +85,21 @@ public class Settings : ModSettings
                 var sec = list.BeginSection(24 * 5);
                 sec.Label("Pride".Translate());
                 // TODO: sec.CheckboxLabeled($"{"Pride".Translate()}", ref isPrideEnabled);
-                
+
                 prideRQOffset =
                     (int)Math.Round(sec.SliderLabeled(
                         $"{"RQ_Offset".Translate()}: {prideRQOffset}",
-                        prideRQOffset, 0, 6));
+                        prideRQOffset, 0, 4));
 
                 prideMoodFactor =
                     (float)Math.Round(sec.SliderLabeled(
                         $"{"Mood_Factor".Translate()}: {prideMoodFactor}",
-                        prideMoodFactor, 0, 3), 1);
+                        prideMoodFactor, 0, 5), 1);
 
                 prideDurationFactor =
                     (float)Math.Round(sec.SliderLabeled(
                         $"{"Duration_Factor".Translate()}: {prideDurationFactor}",
-                        prideDurationFactor, 0, 3), 1);
+                        prideDurationFactor, 0, 5), 1);
 
                 list.EndSection(sec);
             }
@@ -115,12 +115,12 @@ public class Settings : ModSettings
                 frustrationMoodFactor =
                     (float)Math.Round(sec.SliderLabeled(
                         $"{"Mood_Factor".Translate()}: {frustrationMoodFactor}",
-                        frustrationMoodFactor, 0, 3), 1);
+                        frustrationMoodFactor, 0, 5), 1);
 
                 frustrationDurationFactor =
                     (float)Math.Round(sec.SliderLabeled(
                         $"{"Duration_Factor".Translate()}: {frustrationDurationFactor}",
-                        frustrationDurationFactor, 0, 3), 1);
+                        frustrationDurationFactor, 0, 5), 1);
                 list.EndSection(sec);
             }
         }
@@ -131,7 +131,7 @@ public class Settings : ModSettings
         {
             Widgets.BeginScrollView(outRectRight, ref scrollPositionRight, scrollRectRight, true);
             list.Begin(scrollRectRight);
-            DrawEgTable(list, exampleWorkAmount);
+            DrawEgTable(list, ref exampleWorkAmount);
             list.End();
             Widgets.EndScrollView();
         }
@@ -157,10 +157,7 @@ public class Settings : ModSettings
         (3, 5), // Masterwork
         (3, 6), // Legendary
 
-        // Skill 4
-        (4, 6), // Legendary (not in table explicitly, but implied if masterwork is 0.01% it's impossible)
-
-        // Skill 5
+        (4, 6), // Legendary
         (5, 6), // Legendary
 
         // From Skill 12 onwards, 'Awful' is 0.00%
@@ -173,34 +170,21 @@ public class Settings : ModSettings
         (18, 0), // Awful
         (19, 0), // Awful
         (20, 0), // Awful
-
-        // Any other 0.00% explicitly from your table
-        // For Skill 1 to Skill 11, Masterwork is not 0.00%
-        // Check "Legendary" column for all skills if you have one.
-        // Based on the provided snippet, Masterwork is never 0% from skill 6 onwards.
-        // I'll add all Legendary occurrences as 0% for qualities up to 6.
-        // If your game defines 7 quality levels (Awful to Legendary), and your table only shows 6,
-        // then the 7th (Legendary) is effectively 0% for all those rows.
-        // Assuming your QualityCategory enum has 7 levels, with index 6 being Legendary.
-
-        // Adding Legendary for all skills as it's not shown in table but implied 0.00%
-        (0, 6), (1, 6), (2, 6), (3, 6), (4, 6), (5, 6), (6, 6), (7, 6), (8, 6), (9, 6),
-        (10, 6), (11, 6), (12, 6), (13, 6), (14, 6), (15, 6), (16, 6), (17, 6), (18, 6), (19, 6), (20, 6)
     ];
 
 
-    public static void DrawEgTable(Listing_Standard list, int exampleWorkAmount)
+    public static void DrawEgTable(Listing_Standard list,ref int exampleWorkAmount)
     {
         list.Label("Example".Translate());
         list.Label("Example_Desc".Translate());
 
-        string workAmountBuffer = exampleWorkAmount.ToString();
+        string workAmountBuffer = null;
         list.TextFieldNumericLabeled("Work_Amount".Translate(), ref exampleWorkAmount, ref workAmountBuffer);
 
         var eg = ImpCore.GenerateExameple(exampleWorkAmount);
 
         int numSkillLevels = 21; // 0-20
-        int numQualities = 7;    // QualityCategory enum count (Awful to Legendary)
+        int numQualities = 7; // QualityCategory enum count (Awful to Legendary)
 
         // Calculate maximum column widths for proper alignment
         float[] columnWidths = new float[1 + numQualities];
@@ -235,6 +219,7 @@ public class Settings : ModSettings
                     var (mood, duration, score) = eg[i, j];
                     cellContent = $"{Math.Round(mood, 0)}x{Math.Round(duration, 1)}";
                 }
+
                 columnWidths[1 + j] = Math.Max(columnWidths[1 + j], Text.CalcSize(cellContent).x);
             }
         }
@@ -274,6 +259,7 @@ public class Settings : ModSettings
             string qualityLabel = ((QualityCategory)j).GetLabelShort();
             strBuilder.Append(AlignRightToWidth(qualityLabel, columnWidths[1 + j]));
         }
+
         strBuilder.AppendLine();
 
         // Data Rows
@@ -296,7 +282,7 @@ public class Settings : ModSettings
                 {
                     var (mood, duration, score) = eg[i, j];
                     cellContent = $"{Math.Round(mood, 0)}x{Math.Round(duration, 1)}";
-                    
+
                     // Apply color only if mood and duration are both non-zero
                     if (mood != 0f && duration != 0f)
                     {
@@ -307,9 +293,10 @@ public class Settings : ModSettings
                         finalText = cellContent;
                     }
                 }
-                
+
                 strBuilder.Append(AlignRightToWidth(finalText, columnWidths[1 + j]));
             }
+
             strBuilder.AppendLine();
         }
 

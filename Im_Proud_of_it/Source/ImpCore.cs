@@ -108,18 +108,18 @@ public class ImpCore
 
         if (RQ > 0)
         {
-            RQ -= Settings.prideRQOffset;
+            RQ -= ImpSettings.prideRQOffset;
             if (RQ <= 0) return false;
-            moodFactor = Settings.prideMoodFactor;
-            durationFactor = Settings.prideDurationFactor;
+            moodFactor = ImpSettings.prideMoodFactor;
+            durationFactor = ImpSettings.prideDurationFactor;
         }
         else if (RQ < 0)
         {
             if (!isFrustrainEnabled) return false;
-            RQ += Settings.frustrationRQOffset;
+            RQ += ImpSettings.frustrationRQOffset;
             if (RQ >= 0) return false;
-            moodFactor = Settings.frustrationMoodFactor;
-            durationFactor = Settings.frustrationDurationFactor;
+            moodFactor = ImpSettings.frustrationMoodFactor;
+            durationFactor = ImpSettings.frustrationDurationFactor;
         }
         else
         {
@@ -136,24 +136,12 @@ public class ImpCore
         if (RQ < 0) moodFactor *= -1;
         RQ = Math.Abs(RQ);
         var mood = (float)(K1 * Math.Pow(A, RQ) + K2 * Math.Log(workAmount) / Math.Log(S) + CM);
-        var duration = K3 * workAmount / S * RQ + CT;
-
-        if (quality == QualityCategory.Masterwork)
-        {
-            mood += 1;
-            duration += 1;
-        }
-
-        if (quality == QualityCategory.Legendary)
-        {
-            mood += 2;
-            duration += 3;
-        }
+        var duration = K3 * Math.Sqrt(workAmount / S) * Math.Log(RQ + 1) + CT;
 
         mood *= moodFactor;
         duration *= durationFactor;
 
-        return (mood, duration);
+        return (mood, (float)duration);
     }
 
     /// <summary>
@@ -179,7 +167,7 @@ public class ImpCore
         for (var j = 0; j < 7; j++)
         {
             GetParams(i, (QualityCategory)j, out var RQ, out var moodFactor, out var durationFactor,
-                Settings.isFrustrationEnabled);
+                ImpSettings.isFrustrationEnabled);
             var (mood, duration) = CalcMoodAndDuration((QualityCategory)j, RQ, workAmount, moodFactor, durationFactor);
             eg[i, j] = (mood, duration, RQ);
         }

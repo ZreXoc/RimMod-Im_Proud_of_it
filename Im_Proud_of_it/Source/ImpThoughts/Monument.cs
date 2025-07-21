@@ -23,8 +23,8 @@ class MonumentCompletedSignalReceiver : ISignalReceiver
         // TODO: based on monument size
         // _monumentMarker.Size;
         var def = ImpThoughtDefOf.ImP_Pride_Monument;
-        def.stages[0].baseMoodEffect = Settings.mounumentMood;
-        def.durationDays = Settings.mounumentDuration;
+        def.stages[0].baseMoodEffect = ImpSettings.mounumentMood;
+        def.durationDays = ImpSettings.mounumentDuration;
         foreach (var pawn in PawnsFinder.HomeMaps_FreeColonistsSpawned)
         {
             pawn.needs?.mood?.thoughts?.memories.TryGainMemory(ImpThoughtDefOf.ImP_Pride_Monument);
