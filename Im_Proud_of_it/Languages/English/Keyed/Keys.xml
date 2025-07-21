@@ -1,28 +1,35 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <LanguageData>
+
     <ImProudOfIt>I'm proud of it!</ImProudOfIt>
-    <Settings_Desc>Relative Quality is the difference between the quality of the item and the pawn's crafting level rank, so that lower level pawns will also take pride in crafting normal items. The rank are specified as follows:
-        0: Awful, craft 0;
-        1: Poor, craft 1-4;
-        2: Normal, craft 5-9;
-        3: Good, craft 10-18;
-        4: Excellent, craft 19+;
-        5: Masterwork;
-        6: Legendary;
-        If a crafted 8 pawn makes a Chain Shotgun (Good), the Relative Quality is 3 - 2 = 1.</Settings_Desc>
+
+    <Settings_Desc>The mood bonus and duration are determined by Relative Quality. Relative Quality is the difference between the item's quality rank and the pawn's crafting skill rank. This allows pawns with lower skills to also feel pride when crafting good items. The quality ranks are specified as follows:
+        0: Awful / Skill Level 0
+        1: Poor / Skill Level 1-4
+        2: Normal / Skill Level 5-9
+        3: Good / Skill Level 10-18
+        4: Excellent / Skill Level 19+
+        5: Masterwork
+        6: Legendary
+        For example: If a pawn with a crafting skill of 8 crafts a Chain Shotgun (Good), their Relative Quality is 3 - 2 = 1.</Settings_Desc>
+
     <RQ_Offset>Relative Quality offset</RQ_Offset>
     <Mood_Offset>Mood offset</Mood_Offset>
-    <Duration_Offset>Duration offset (hour)</Duration_Offset>
-    <Mood_Factor>mood factor</Mood_Factor>
-    <Duration_Factor>duration factor</Duration_Factor>
-    <Monument>monument</Monument>
-    <Mood>mood buff</Mood>
-    <Duration>duration</Duration>
+    <Duration_Offset>Duration offset (hours)</Duration_Offset>
+    <Mood_Factor>Mood factor</Mood_Factor>
+    <Duration_Factor>Duration factor</Duration_Factor>
+    <Monument>Monument</Monument>
+    <Mood>Mood buff</Mood>
+    <Duration>Duration</Duration>
     <Pride>Pride</Pride>
     <Frustration>Frustration</Frustration>
-    <Frustration_Enabled>allow frustration</Frustration_Enabled>
+    <Frustration_Enabled>Enable Frustration</Frustration_Enabled>
     <Skill>Skill</Skill>
     <Example>Example</Example>
-    <Example_Desc>The mood buff (mood x duration(day)) is as follows.(notice that it's impossible to produce very high/low quality items in some skill level)</Example_Desc>
-    <Work_Amount>work amount (tick)</Work_Amount>
+    <Example_Desc>
+        The gains (Mood buff × Duration (days)) for different crafting skill levels and item qualities are shown below.
+        (Note: It's impossible to produce very high or very low quality items at certain skill levels.)
+    </Example_Desc>
+    <Work_Amount>Work amount (ticks)</Work_Amount>
+
 </LanguageData>
