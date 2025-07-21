@@ -5,26 +5,24 @@ using Verse;
 
 namespace ImP;
 
-[HarmonyPatch(typeof(GenRecipe), nameof(GenRecipe.MakeRecipeProducts))]
+[HarmonyPatch(typeof(GenRecipe), "PostProcessProduct")]
 public class PatchMakeRecipeProducts
 {
-
     [HarmonyPostfix]
-    static IEnumerable<Thing> Postfix(IEnumerable<Thing> __result,Pawn worker, RecipeDef recipeDef)
+    static Thing Postfix(
+        Thing __result,
+        RecipeDef recipeDef,
+        Pawn worker
+)
     {
+        var thought = ImpCore.GetFixedThoughtDefOf(worker, recipeDef, __result);
 
-        foreach (var thing in __result)
+        if (thought != null)
         {
-
-            var thought = ImpCore.GetFixedThoughtDefOf(worker, recipeDef, thing);
-
-            if (thought != null)
-            {
-                worker?.needs?.mood?.thoughts?.memories?.TryGainMemory(thought);
-                // Log.Message($"thought:: days: {thought.durationDays}; mood: {thought.stages}");
-            }
-
-            yield return thing;
+            worker?.needs?.mood?.thoughts?.memories?.TryGainMemory(thought);
+            // Log.Message($"thought:: days: {thought.durationDays}; mood: {thought.stages}");
         }
+
+        return __result;
     }
 }

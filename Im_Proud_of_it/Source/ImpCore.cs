@@ -35,28 +35,26 @@ public class ImpCore
         };
     }
 
-    // Construction
+    // Should be Construction
     public static ThoughtDef GetFixedThoughtDefOf(Pawn worker, Thing thing)
     {
         QualityCategory quality;
-
-        // CompQuality comp1 = thing.TryGetComp<CompQuality>();
 
         if (worker?.skills == null || !thing.TryGetQuality(out quality)) return null;
         // Log.Message(quality);
 
         // if (thing.HasThingCategory(ThingCategoryDefOf.Buildings))
-        if (thing.def.category == ThingCategory.Building)
+        if (thing.def.category != ThingCategory.Building)
         {
-            quality -= (QualityCategory)GetRoleEffectQualityOffset(worker);
-            var level = worker.skills.GetSkill(SkillDefOf.Construction).Level;
-            var workAmount = thing.GetStatValue(StatDefOf.WorkToBuild);
-            var thought = GetFixedThoughtDefOf(level, quality, workAmount);
-            return thought;
+            Log.ErrorOnce($"{thing} is not in the category of Buildings", "Imp_not_a_building".GetHashCode());
+            return null;
         }
 
-        Log.ErrorOnce($"{thing} is not in the category of Buildings", "Imp_not_a_building".GetHashCode());
-        return null;
+        quality -= (QualityCategory)GetRoleEffectQualityOffset(worker);
+        var level = worker.skills.GetSkill(SkillDefOf.Construction).Level;
+        var workAmount = thing.GetStatValue(StatDefOf.WorkToBuild);
+        var thought = GetFixedThoughtDefOf(level, quality, workAmount);
+        return thought;
     }
 
     // Craft and sculpture
@@ -80,8 +78,7 @@ public class ImpCore
         if (worker.Ideo == null) return 0;
         var role = worker.Ideo.GetRole(worker);
         var roleEffect =
-            role?.def.roleEffects?.FirstOrDefault(
-                eff => eff is RoleEffect_ProductionQualityOffset);
+            role?.def.roleEffects?.FirstOrDefault(eff => eff is RoleEffect_ProductionQualityOffset);
         return ((RoleEffect_ProductionQualityOffset)roleEffect)?.offset ?? 0;
     }
 
@@ -183,7 +180,7 @@ public class ImpCore
         {
             GetParams(i, (QualityCategory)j, out var RQ, out var moodFactor, out var durationFactor,
                 Settings.isFrustrationEnabled);
-            var (mood, duration) =CalcMoodAndDuration((QualityCategory)j, RQ, workAmount, moodFactor, durationFactor);
+            var (mood, duration) = CalcMoodAndDuration((QualityCategory)j, RQ, workAmount, moodFactor, durationFactor);
             eg[i, j] = (mood, duration, RQ);
         }
 
