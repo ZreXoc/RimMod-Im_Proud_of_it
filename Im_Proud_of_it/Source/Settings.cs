@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using RimWorld;
@@ -84,6 +85,8 @@ public class Settings : ModSettings
             {
                 var sec = list.BeginSection(24 * 5);
                 sec.Label("Pride".Translate());
+                // TODO: sec.CheckboxLabeled($"{"Pride".Translate()}", ref isPrideEnabled);
+                
                 prideRQOffset =
                     (int)Math.Round(sec.SliderLabeled(
                         $"{"RQ_Offset".Translate()}: {prideRQOffset}",
@@ -103,10 +106,8 @@ public class Settings : ModSettings
             }
             list.Gap(5);
             {
-                var sec = list.BeginSection(24 * 6);
-                sec.Label("Frustration".Translate());
-
-                sec.CheckboxLabeled($"{"Frustration_Enabled".Translate()}", ref isFrustrationEnabled);
+                var sec = list.BeginSection(24 * 5);
+                sec.CheckboxLabeled($"{"Frustration".Translate()}", ref isFrustrationEnabled);
                 frustrationRQOffset =
                     (int)Math.Round(sec.SliderLabeled(
                         $"{"RQ_Offset".Translate()}: {frustrationRQOffset}",
@@ -128,55 +129,231 @@ public class Settings : ModSettings
         list.End();
         Widgets.EndScrollView();
 
-        Widgets.BeginScrollView(outRectRight, ref scrollPositionRight, scrollRectRight, true);
-        list.Begin(scrollRectRight);
         {
-            list.Label("Example".Translate());
-            list.Label("Example_Desc".Translate());
-
-            string workAmountBuffer = exampleWorkAmount.ToString();
-            list.TextFieldNumericLabeled("Work_Amount".Translate(), ref exampleWorkAmount, ref workAmountBuffer);
-
-
-            // Preview
-            var eg = ImpCore.GenerateExameple(exampleWorkAmount);
-            string str = "";
-            const int ALIGN = 10;
-
-            // align for Chinese Character
-            string AlignFixed(string str, int align)
-            {
-                int width = str.Sum(ch => (ch >= 0x4e00 && ch <= 0x9fbb) ? 2 : 1);
-                return new string(' ', Math.Max(align - width, 0)) + str;
-            }
-
-            // title
-            str += AlignFixed("Skill".Translate(), 5);
-            for (int i = 0; i < 7; i++)
-            {
-                string quality = ((QualityCategory)i).GetLabelShort();
-                // str+=quality+new string(' ',align-Encoding.GetEncoding("gb2312").GetBytes(quality).Length); 
-                // str += $"{quality,align - 1}";
-                str += AlignFixed(quality, ALIGN);
-            }
-
-            str += "\n";
-
-            for (int i = 0; i < 21; i++)
-            {
-                str += $"{i,5}";
-                for (int j = 0; j < 7; j++)
-                {
-                    var (mood, duration) = eg[i, j];
-                    var tmp = $"{Math.Round(mood)}x{Math.Round(duration, 1)}" + (j == 6 ? '\n' : ',');
-                    str += $"{tmp,ALIGN}";
-                }
-            }
-
-            // Log.Message(str);
-            list.Label(str);
+            Widgets.BeginScrollView(outRectRight, ref scrollPositionRight, scrollRectRight, true);
+            list.Begin(scrollRectRight);
+            DrawEgTable(list, exampleWorkAmount);
+            list.End();
+            Widgets.EndScrollView();
         }
-        list.End();
-        Widgets.EndScrollView();
+    }
+
+    // Hardcoded map for (skillLevel, qualityIndex) where probability is 0.00%
+    // Quality indices: 0=Awful, 1=Poor, 2=Normal, 3=Good, 4=Excellent, 5=Masterwork, 6=Legendary
+    private static readonly HashSet<(int skillLevel, int qualityIndex)> ZeroChanceMap =
+    [
+        (0, 4), // Excellent
+        (0, 5), // Masterwork
+        (0, 6), // Legendary (if exists, your table only goes to Masterwork)
+
+        // Skill 1
+        (1, 5), // Masterwork
+        (1, 6), // Legendary
+
+        // Skill 2
+        (2, 5), // Masterwork
+        (2, 6), // Legendary
+
+        // Skill 3
+        (3, 5), // Masterwork
+        (3, 6), // Legendary
+
+        // Skill 4
+        (4, 6), // Legendary (not in table explicitly, but implied if masterwork is 0.01% it's impossible)
+
+        // Skill 5
+        (5, 6), // Legendary
+
+        // From Skill 12 onwards, 'Awful' is 0.00%
+        (12, 0), // Awful
+        (13, 0), // Awful
+        (14, 0), // Awful
+        (15, 0), // Awful
+        (16, 0), // Awful
+        (17, 0), // Awful
+        (18, 0), // Awful
+        (19, 0), // Awful
+        (20, 0), // Awful
+
+        // Any other 0.00% explicitly from your table
+        // For Skill 1 to Skill 11, Masterwork is not 0.00%
+        // Check "Legendary" column for all skills if you have one.
+        // Based on the provided snippet, Masterwork is never 0% from skill 6 onwards.
+        // I'll add all Legendary occurrences as 0% for qualities up to 6.
+        // If your game defines 7 quality levels (Awful to Legendary), and your table only shows 6,
+        // then the 7th (Legendary) is effectively 0% for all those rows.
+        // Assuming your QualityCategory enum has 7 levels, with index 6 being Legendary.
+
+        // Adding Legendary for all skills as it's not shown in table but implied 0.00%
+        (0, 6), (1, 6), (2, 6), (3, 6), (4, 6), (5, 6), (6, 6), (7, 6), (8, 6), (9, 6),
+        (10, 6), (11, 6), (12, 6), (13, 6), (14, 6), (15, 6), (16, 6), (17, 6), (18, 6), (19, 6), (20, 6)
+    ];
+
+
+    public static void DrawEgTable(Listing_Standard list, int exampleWorkAmount)
+    {
+        list.Label("Example".Translate());
+        list.Label("Example_Desc".Translate());
+
+        string workAmountBuffer = exampleWorkAmount.ToString();
+        list.TextFieldNumericLabeled("Work_Amount".Translate(), ref exampleWorkAmount, ref workAmountBuffer);
+
+        var eg = ImpCore.GenerateExameple(exampleWorkAmount);
+
+        int numSkillLevels = 21; // 0-20
+        int numQualities = 7;    // QualityCategory enum count (Awful to Legendary)
+
+        // Calculate maximum column widths for proper alignment
+        float[] columnWidths = new float[1 + numQualities];
+
+        // Calculate header row widths
+        string skillHeader = "Skill".Translate();
+        columnWidths[0] = Math.Max(columnWidths[0], Text.CalcSize(skillHeader).x);
+
+        for (int j = 0; j < numQualities; j++)
+        {
+            string qualityLabel = ((QualityCategory)j).GetLabelShort();
+            columnWidths[1 + j] = Math.Max(columnWidths[1 + j], Text.CalcSize(qualityLabel).x);
+        }
+
+        // Calculate data row widths
+        for (int i = 0; i < numSkillLevels; i++)
+        {
+            // Skill Level column
+            string skillLevelString = i.ToString();
+            columnWidths[0] = Math.Max(columnWidths[0], Text.CalcSize(skillLevelString).x);
+
+            // Data columns for each quality
+            for (int j = 0; j < numQualities; j++)
+            {
+                string cellContent;
+                if (ZeroChanceMap.Contains((i, j))) // Check against the hardcoded map
+                {
+                    cellContent = "-";
+                }
+                else
+                {
+                    var (mood, duration, score) = eg[i, j];
+                    cellContent = $"{Math.Round(mood, 0)}x{Math.Round(duration, 1)}";
+                }
+                columnWidths[1 + j] = Math.Max(columnWidths[1 + j], Text.CalcSize(cellContent).x);
+            }
+        }
+
+        float columnPadding = 8f;
+        for (int k = 0; k < columnWidths.Length; k++)
+        {
+            columnWidths[k] += columnPadding;
+        }
+
+        StringBuilder strBuilder = new StringBuilder();
+
+        // Helper for right-aligning text to a target pixel width
+        string AlignRightToWidth(string text, float targetWidth)
+        {
+            float currentWidth = Text.CalcSize(text).x;
+            if (currentWidth >= targetWidth) return text;
+            float spaceWidth = Text.CalcSize(" ").x;
+            int spacesNeeded = Mathf.CeilToInt((targetWidth - currentWidth) / spaceWidth);
+            return new string(' ', spacesNeeded) + text;
+        }
+
+        // Helper for left-aligning text to a target pixel width
+        string AlignLeftToWidth(string text, float targetWidth)
+        {
+            float currentWidth = Text.CalcSize(text).x;
+            if (currentWidth >= targetWidth) return text;
+            float spaceWidth = Text.CalcSize(" ").x;
+            int spacesNeeded = Mathf.CeilToInt((targetWidth - currentWidth) / spaceWidth);
+            return text + new string(' ', spacesNeeded);
+        }
+
+        // Title Row
+        strBuilder.Append(AlignLeftToWidth(skillHeader, columnWidths[0]));
+        for (int j = 0; j < numQualities; j++)
+        {
+            string qualityLabel = ((QualityCategory)j).GetLabelShort();
+            strBuilder.Append(AlignRightToWidth(qualityLabel, columnWidths[1 + j]));
+        }
+        strBuilder.AppendLine();
+
+        // Data Rows
+        for (int i = 0; i < numSkillLevels; i++)
+        {
+            string skillLevelString = i.ToString();
+            strBuilder.Append(AlignRightToWidth(skillLevelString, columnWidths[0]));
+
+            for (int j = 0; j < numQualities; j++)
+            {
+                string cellContent;
+                string finalText;
+
+                if (ZeroChanceMap.Contains((i, j))) // Check against the hardcoded map
+                {
+                    cellContent = "-";
+                    finalText = cellContent; // No color for "-"
+                }
+                else
+                {
+                    var (mood, duration, score) = eg[i, j];
+                    cellContent = $"{Math.Round(mood, 0)}x{Math.Round(duration, 1)}";
+                    
+                    // Apply color only if mood and duration are both non-zero
+                    if (mood != 0f && duration != 0f)
+                    {
+                        finalText = ImpRQColors.ColorText(cellContent, score);
+                    }
+                    else // If either mood or duration is 0, display without color
+                    {
+                        finalText = cellContent;
+                    }
+                }
+                
+                strBuilder.Append(AlignRightToWidth(finalText, columnWidths[1 + j]));
+            }
+            strBuilder.AppendLine();
+        }
+
+        list.Label(strBuilder.ToString());
+    }
+}
+
+static class ImpRQColors
+{
+    // Define the hexadecimal color codes for various score ranges.
+    public const string PrideHighColor = "#00FF00"; // Bright Green for high pride (>= 3.0)
+    public const string PrideMediumColor = "#ADFF2F"; // GreenYellow for medium pride (>= 2.0)
+    public const string PrideLowColor = "#90EE90"; // LightGreen for low pride (>= 1.0)
+
+    public const string NormalColor = "#CCCCCC"; // Light Gray for neutral scores (between -1.0 and 1.0)
+
+    public const string FrustrationLowColor = "#FFB6C1"; // LightPink for low frustration (<= -1.0)
+    public const string FrustrationMediumColor = "#FF6347"; // Tomato for medium frustration (<= -2.0)
+    public const string FrustrationHighColor = "#FF0000"; // Red for high frustration (<= -3.0)
+
+    /// <summary>
+    /// Gets the hexadecimal color string corresponding to a given float score.
+    /// </summary>
+    public static string GetColorHex(float score)
+    {
+        return score switch
+        {
+            >= 3f => PrideHighColor,
+            >= 2f => PrideMediumColor,
+            >= 1f => PrideLowColor,
+            <= -3f => FrustrationHighColor,
+            <= -2f => FrustrationMediumColor,
+            <= -1f => FrustrationLowColor,
+            _ => NormalColor // Default case if no other conditions are met (e.g., -1.0 < score < 1.0)
+        };
+    }
+
+    /// <summary>
+    /// Wraps a given text string with a color tag based on the provided float score.
+    /// </summary>
+    public static string ColorText(string text, float score)
+    {
+        var hexColor = GetColorHex(score);
+        return $"<color={hexColor}>{text}</color>";
     }
 }

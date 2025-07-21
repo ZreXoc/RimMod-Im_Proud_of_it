@@ -1,20 +1,18 @@
-using System;
 using HarmonyLib;
 using Verse;
 using UnityEngine;
-using Listing_Standard = Verse.Listing_Standard;
 
 namespace ImP;
 
-public class Mod : Verse.Mod
+// ReSharper disable once UnusedType.Global
+public class ImpMod : Mod
 {
 
-    public Mod(ModContentPack content) : base(content)
+    public ImpMod(ModContentPack content) : base(content)
     {
         var harmony = new Harmony("zrex.ImP");
         harmony.PatchAll();
     }
-
 
     public override void DoSettingsWindowContents(Rect inRect)
     {
@@ -22,4 +20,20 @@ public class Mod : Verse.Mod
     }
 
     public override string SettingsCategory() => "ImProudOfIt".Translate();
+}
+
+// ReSharper disable once UnusedType.Global
+public class ImpGameComponent : GameComponent
+{
+    public ImpGameComponent()
+    {
+    }
+    
+    public ImpGameComponent(Game game)
+    {
+    }
+    public override void LoadedGame()
+    {
+        ImpThoughts.Monument.Register();
+    }
 }

@@ -1,10 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-    <ImP_Pride_Low.stages.0.label>pride (low)</ImP_Pride_Low.stages.0.label>
-    <ImP_Pride_Medium.stages.0.label>pride (medium)</ImP_Pride_Medium.stages.0.label>
-    <ImP_Pride_High.stages.0.label>pride (high)</ImP_Pride_High.stages.0.label>
+    <ImP_Pride_Low.stages.0.label>Pride (Low)</ImP_Pride_Low.stages.0.label>
+    <ImP_Pride_Low.stages.0.description>I made something decent.</ImP_Pride_Low.stages.0.description>
 
-    <ImP_Pride_Low.stages.0.description>I made a nice product.</ImP_Pride_Low.stages.0.description>
-    <ImP_Pride_Medium.stages.0.description>I made a perfect product.</ImP_Pride_Medium.stages.0.description>
-    <ImP_Pride_High.stages.0.description>I made a product that is far above my level!</ImP_Pride_High.stages.0.description>
+    <ImP_Pride_Medium.stages.0.label>Pride (Medium)</ImP_Pride_Medium.stages.0.label>
+    <ImP_Pride_Medium.stages.0.description>I made something good.</ImP_Pride_Medium.stages.0.description>
+
+    <ImP_Pride_High.stages.0.label>Pride (High)</ImP_Pride_High.stages.0.label>
+    <ImP_Pride_High.stages.0.description>I made something perfect!</ImP_Pride_High.stages.0.description>
+
+    <ImP_Frustration_Low.stages.0.label>Frustration (Low)</ImP_Frustration_Low.stages.0.label>
+    <ImP_Frustration_Low.stages.0.description>I could have done better.</ImP_Frustration_Low.stages.0.description>
+
+    <ImP_Frustration_Medium.stages.0.label>Frustration (Medium)</ImP_Frustration_Medium.stages.0.label>
+    <ImP_Frustration_Medium.stages.0.description>I messed up.</ImP_Frustration_Medium.stages.0.description>
+
+    <ImP_Frustration_High.stages.0.label>Frustration (High)</ImP_Frustration_High.stages.0.label>
+    <ImP_Frustration_High.stages.0.description>This garbage is a stain on my life.</ImP_Frustration_High.stages.0.description>
+
+    <ImP_Pride_Monument.stages.0.label>Pride (Monument)</ImP_Pride_Monument.stages.0.label>
+    <ImP_Pride_Monument.stages.0.description>What a magnificent monument!</ImP_Pride_Monument.stages.0.description>
 </LanguageData>

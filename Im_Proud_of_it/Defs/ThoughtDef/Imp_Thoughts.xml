@@ -33,7 +33,7 @@
             </li>
         </stages>
     </ThoughtDef>
-   
+
     <!-- frustration -->
     <ThoughtDef Name="FrustrationBase" Abstract="True">
         <thoughtClass>Thought_Memory</thoughtClass>
@@ -68,7 +68,7 @@
             </li>
         </stages>
     </ThoughtDef>
-    
+
     <!-- monument -->
     <ThoughtDef>
         <defName>ImP_Pride_Monument</defName>
@@ -79,7 +79,7 @@
         <stages>
             <li>
                 <label>pride (monument)</label>
-                <description>What a spectacular monument!!</description>
+                <description>What a magnificent monument!!</description>
                 <baseMoodEffect>8</baseMoodEffect>
             </li>
         </stages>

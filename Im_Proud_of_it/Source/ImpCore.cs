@@ -6,13 +6,6 @@ namespace ImP;
 
 public class ImpCore
 {
-    public enum MoodType
-    {
-        Pride,
-        Frustration,
-        Monument
-    }
-
     private static readonly float K1 = 1, K2 = 1, K3 = 1, A = 2;
     private static readonly float CM = 1, CT = 0;
     private static readonly float S = 31000; // Work of chain shotgun
@@ -181,16 +174,17 @@ public class ImpCore
         return (int)quality - (LEVELS.FirstIndexOf(l => skill < l) - 1);
     }
 
-    public static (float, float)[,] GenerateExameple(int workAmount)
+    public static (float, float, float)[,] GenerateExameple(int workAmount)
     {
-        var eg = new (float, float)[21, 7];
+        var eg = new (float, float, float)[21, 7];
 
         for (var i = 0; i < 21; i++)
         for (var j = 0; j < 7; j++)
         {
             GetParams(i, (QualityCategory)j, out var RQ, out var moodFactor, out var durationFactor,
                 Settings.isFrustrationEnabled);
-            eg[i, j] = CalcMoodAndDuration((QualityCategory)j, RQ, workAmount, moodFactor, durationFactor);
+            var (mood, duration) =CalcMoodAndDuration((QualityCategory)j, RQ, workAmount, moodFactor, durationFactor);
+            eg[i, j] = (mood, duration, RQ);
         }
 
         return eg;

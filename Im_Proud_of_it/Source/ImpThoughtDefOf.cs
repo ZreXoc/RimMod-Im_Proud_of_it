@@ -2,6 +2,7 @@ using RimWorld;
 
 namespace ImP;
 
+// ReSharper disable UnassignedField.Global
 [DefOf]
 public class ImpThoughtDefOf
 {
